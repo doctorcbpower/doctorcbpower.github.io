@@ -5,26 +5,54 @@ description: "Open-source software written and maintained by Chris Power for cos
 ---
 <h1>Software</h1>
 
-  <p>I write and maintain software as part of my research, most of it released openly. Most of it fits together: DORCHA produces the haloes, Ashvini models the galaxies that form within them, and imbas renders the results.</p>
+<p>I develop and maintain scientific software as part of my research. Some of it is closely tied to particular projects; some has grown into more general tools for working with simulations, merger trees, and astrophysical populations. I release most of the software openly, both because it makes the research easier to reproduce and because useful tools tend to outlive the particular project for which they were written.</p>
 
-  <h2>foraois</h2>
-  <p>An open-source Python implementation for modelling populations of high-mass X-ray binaries.</p>
-  <p><a href="https://github.com/doctorcbpower/foraois">github.com/doctorcbpower/foraois</a></p>
+<h2>Current software</h2>
 
-  <h2>Ashvini</h2>
-  <p>A semi-analytic galaxy formation model built around Monte Carlo merger trees. I use it to test how choices made in modelling galaxy formation interact with the underlying dark matter physics.</p>
-  <p><a href="https://github.com/doctorcbpower/Ashvini">github.com/doctorcbpower/Ashvini</a></p>
+<h3>foraois</h3>
 
-  <h2>DORCHA</h2>
-  <p>A suite of cosmological zoom simulations of Milky Way analogue haloes, together with the orbit and initial-conditions tooling that supports it.</p>
-  <p><a href="https://github.com/doctorcbpower/Dorcha">github.com/doctorcbpower/Dorcha</a></p>
+<p>A Python implementation of extended Press&ndash;Schechter merger trees for dark matter halo populations. It supports different collapse barriers and several dark matter models, including CDM, WDM and fuzzy dark matter, and is designed to make the assumptions entering the merger-tree calculation explicit.</p>
 
-  <h2>realta</h2>
-  <p>A modernised Monte Carlo model for stellar and binary populations, extending the framework described in Power et al. (2009).</p>
-  <p><a href="https://github.com/doctorcbpower/realta">github.com/doctorcbpower/realta</a></p>
+<p><a href="https://github.com/doctorcbpower/foraois">github.com/doctorcbpower/foraois</a></p>
 
-  <h2>imbas</h2>
-  <p>A rendering engine that turns simulation snapshots &mdash; Gadget, SWIFT, Arepo &mdash; into publication-quality images.</p>
-  <p><a href="https://github.com/doctorcbpower/imbas_renderer">github.com/doctorcbpower/imbas_renderer</a></p>
+<h3>Ashvini</h3>
 
-  <p class="note">A number of smaller scripts and utilities &mdash; for processing simulation output, computing power spectra, generating turbulent velocity fields, and setting up zoom initial conditions &mdash; are also on <a href="https://github.com/doctorcbpower">GitHub</a>.</p>
+<p>A Python galaxy formation and evolution model that takes dark matter halo merger histories as input and follows the evolution of gas, stars and dust. I use it to explore how assumptions about galaxy formation interact with the underlying dark matter model.</p>
+
+<p><a href="https://github.com/solas-sims/Ashvini">github.com/solas-sims/Ashvini</a></p>
+
+<h3>realta</h3>
+
+<p>A modular stellar and binary population-synthesis framework, developed from the Monte Carlo model used in my earlier work on high-mass X-ray binaries. The aim is to provide a transparent and reproducible way of following stellar and binary populations from their formation through evolution, compact-object formation and observable properties.</p>
+
+<p><a href="https://github.com/doctorcbpower/realta">github.com/doctorcbpower/realta</a></p>
+
+<h3>imbas</h3>
+
+<p>A rendering engine for turning astrophysical simulation snapshots into high-fidelity images. It reads Gadget, SWIFT and Arepo snapshots and supports particle projection, SPH smoothing, animations and parallel rendering.</p>
+
+<p><a href="https://github.com/doctorcbpower/imbas_renderer">github.com/doctorcbpower/imbas_renderer</a></p>
+
+<h3>AnalysisTools</h3>
+
+<p>A Python toolkit for working with particle-based simulation data, designed for cosmological simulations and galaxy formation studies.
+
+<a href="https://github.com/doctorcbpower/AnalysisTools">AnalysisTools</a> for processing simulation output, and older codes for constructing galaxy components and analysing projected profiles.</p>
+
+<h2>Simulation projects</h2>
+
+<h3>SOLAS</h3>
+
+<p>SOLAS is a collaborative simulation project for modelling astrophysical transients and their observable signatures. The project includes a modified version of AREPO and associated simulation infrastructure.</p>
+
+<p><a href="https://github.com/solas-sims/arepo_solas">github.com/solas-sims/arepo_solas</a></p>
+
+<p>The SOLAS project also maintains a fork of <a href="https://github.com/solas-sims/grackle">Grackle</a>, the chemistry and radiative-cooling library used by a number of astrophysical simulation codes.</p>
+
+<h2>Supporting software</h2>
+
+<p>There are also many smaller scripts and utilities for processing simulations, generating initial conditions, analysing halo catalogues and producing derived quantities. These are generally less polished than the software above, but remain available on <a href="https://github.com/doctorcbpower">GitHub</a>.</p>
+
+<h2>Why I write software</h2>
+
+<p>For me, software is part of the scientific method rather than something separate from the research. A useful code should make the assumptions of a calculation visible, allow different physical models to be compared, and make it possible to reproduce or extend an experiment. I also like building tools that remain useful after the paper that motivated them has been published.</p>
