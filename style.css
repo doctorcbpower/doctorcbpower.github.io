@@ -161,3 +161,13 @@ figure.figure figcaption {
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+figure.figure.diagram {
+  background: #f2efe9;
+  padding: 1rem;
+  border: 1px solid var(--rule);
+}
+
+figure.figure.diagram img {
+  border: none;
+}

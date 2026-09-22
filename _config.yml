@@ -1,0 +1,21 @@
+title: Chris Power
+description: >-
+  Chris Power is a cosmologist and computational astrophysicist at ICRAR,
+  The University of Western Australia, working on dark matter, galaxy
+  formation and cosmological simulations.
+url: "https://doctorcbpower.github.io"
+baseurl: ""
+
+nav:
+  - title: Home
+    url: /
+  - title: Research
+    url: /research.html
+  - title: Software
+    url: /software.html
+  - title: Projects
+    url: /projects.html
+  - title: About
+    url: /about.html
+
+markdown: kramdown
