@@ -134,3 +134,30 @@ footer.site-footer {
   h2 { font-size: 0.9rem; }
   nav.site-nav a { margin-right: 0.9em; }
 }
+
+.portrait {
+  display: block;
+  width: 9rem;
+  height: auto;
+  margin: 0 0 1.6em;
+  border: 1px solid var(--rule);
+  filter: grayscale(100%) contrast(1.05);
+}
+
+figure.figure {
+  margin: 2em 0;
+  padding: 0;
+}
+
+figure.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+
+figure.figure figcaption {
+  margin-top: 0.6em;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
