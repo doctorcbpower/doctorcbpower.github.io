@@ -1,173 +1,231 @@
+/* ============================================================
+   CHRIS POWER — PERSONAL SITE
+   ============================================================ */
+
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+
 :root {
-  --text: #e8e6e2;
-  --muted: #8a8782;
-  --bg: #0a0a0a;
-  --bg-raised: #121212;
-  --rule: #2a2a2a;
-  --link: #e8e6e2;
-  --link-visited: #9a9791;
-  --accent: #7a1f1f;
-  --max-width: 42rem;
-  color-scheme: dark;
+    --text: #dedbd5;
+    --muted: #77736d;
+    --bg: #080808;
+    --bg-raised: #101010;
+    --rule: #292929;
+    --rule-light: #353535;
+
+    --link: #dedbd5;
+    --link-visited: #99958e;
+
+    --accent: #8f2424;
+    --accent-bright: #a52b2b;
+
+    --max-width: 44rem;
+    --wide-width: 58rem;
+
+    color-scheme: dark;
 }
 
-* { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; background: #0a0a0a; }
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--bg);
+}
 
 body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.7;
+    margin: 0;
+    padding: 0;
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size: 1.06rem;
+    line-height: 1.72;
+
+    text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3 {
-  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+h1,
+h2,
+h3,
+.site-title,
+.site-nav {
+    font-family:
+        "Arial Narrow",
+        "Roboto Condensed",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    font-weight: 600;
+    line-height: 1.05;
+
+    color: var(--text);
+
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
 }
 
-h1 { font-size: 1.6rem; margin: 0 0 0.4em; }
+h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+
+    margin: 0 0 2rem;
+
+    line-height: 0.92;
+    letter-spacing: 0.025em;
+}
+
 h2 {
-  font-size: 1rem;
-  margin: 2.4em 0 0.8em;
-  padding-bottom: 0.5em;
-  border-bottom: 1px solid var(--rule);
+    position: relative;
+
+    font-size: 1rem;
+
+    margin: 3.5rem 0 1rem;
+    padding: 0 0 0.65rem;
+
+    border-bottom: 1px solid var(--rule);
+
+    letter-spacing: 0.09em;
 }
 
-p { margin: 0 0 1.2em; color: var(--text); }
+h2::before {
+    content: "";
+
+    display: inline-block;
+
+    width: 1.6rem;
+    height: 2px;
+
+    margin: 0 0.65rem 0.25rem 0;
+
+    background: var(--accent);
+}
+
+h3 {
+    font-size: 0.9rem;
+
+    margin: 2rem 0 0.8rem;
+
+    letter-spacing: 0.08em;
+}
+
+p {
+    margin: 0 0 1.35em;
+    color: var(--text);
+}
+
+
+/* ============================================================
+   LINKS
+   ============================================================ */
 
 a {
-  color: var(--link);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+    color: var(--link);
+
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+
+    transition:
+        color 120ms ease,
+        border-color 120ms ease;
 }
-a:visited { color: var(--link-visited); }
-a:hover { color: var(--accent); }
+
+a:visited {
+    color: var(--link-visited);
+}
+
+a:hover {
+    color: var(--accent-bright);
+}
+
+
+/* ============================================================
+   SITE CONTAINER
+   ============================================================ */
 
 .site {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 3rem 1.25rem 5rem;
+    width: 100%;
+    max-width: var(--max-width);
+
+    margin: 0 auto;
+
+    padding: 3.5rem 1.35rem 5rem;
 }
 
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
 header.site-header {
-  margin-bottom: 3rem;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--rule);
+    margin-bottom: 4rem;
+    padding-bottom: 1.25rem;
+
+    border-bottom: 1px solid var(--rule);
 }
 
 header.site-header .site-title {
-  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+    display: inline-block;
+
+    font-size: 1.05rem;
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
 }
 
 header.site-header .site-title a {
-  color: var(--text);
-  text-decoration: none;
+    color: var(--text);
+    text-decoration: none;
 }
 
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
 nav.site-nav {
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+    margin-top: 1.15rem;
+
+    font-size: 0.74rem;
+
+    text-transform: uppercase;
+    letter-spacing: 0.095em;
 }
 
 nav.site-nav a {
-  color: var(--muted);
-  text-decoration: none;
-  margin-right: 1.3em;
-}
+    position: relative;
 
-nav.site-nav a:hover,
-nav.site-nav a[aria-current="page"] {
-  color: var(--text);
-  border-bottom: 1px solid var(--text);
-}
+    display: inline-block;
 
-.tagline {
-  color: var(--muted);
-  font-size: 1.05rem;
-}
+    margin-right: 1.35em;
 
-ul.plain {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.2em;
-}
-ul.plain li {
-  margin-bottom: 0.5em;
-  padding-bottom: 0.5em;
-  border-bottom: 1px solid var(--rule);
-}
-ul.plain li:last-child { border-bottom: none; }
+    color: var(--muted);
 
-.note {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
+    text-decoration: none;
 
-footer.site-footer {
-  margin-top: 4rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-@media (max-width: 30rem) {
-  body { font-size: 1rem; }
-  h1 { font-size: 1.35rem; }
-  h2 { font-size: 0.9rem; }
-  nav.site-nav a { margin-right: 0.9em; }
-}
-
-.portrait {
-  display: block;
-  width: 9rem;
-  height: auto;
-  margin: 0 0 1.6em;
-  border: 1px solid var(--rule);
-  filter: grayscale(100%) contrast(1.05);
-}
-
-figure.figure {
-  margin: 2em 0;
-  padding: 0;
-}
-
-figure.figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-}
-
-figure.figure figcaption {
-  margin-top: 0.6em;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-figure.figure.diagram {
-  background: #f2efe9;
-  padding: 1rem;
-  border: 1px solid var(--rule);
-}
-
-figure.figure.diagram img {
-  border: none;
+    transition:
+        color 120ms ease,
+        transform 120ms ease;
 }
