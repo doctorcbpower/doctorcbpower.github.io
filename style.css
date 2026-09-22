@@ -1,0 +1,114 @@
+:root {
+  --text: #232120;
+  --muted: #5b5754;
+  --bg: #fbfaf8;
+  --rule: #ddd8d2;
+  --link: #7a3b2e;
+  --link-visited: #5c4b3a;
+  --max-width: 42rem;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  font-weight: normal;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+h1 { font-size: 1.9rem; margin: 0 0 0.3em; }
+h2 { font-size: 1.3rem; margin: 1.8em 0 0.5em; }
+
+p { margin: 0 0 1.1em; }
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+a:visited { color: var(--link-visited); }
+a:hover { color: var(--text); }
+
+.site {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+header.site-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+header.site-header .site-title {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  font-size: 1.3rem;
+}
+
+header.site-header .site-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+nav.site-nav {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+}
+
+nav.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-right: 1.1em;
+}
+
+nav.site-nav a:hover,
+nav.site-nav a[aria-current="page"] {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+ul.plain {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.1em;
+}
+ul.plain li { margin-bottom: 0.4em; }
+
+.note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+footer.site-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 30rem) {
+  body { font-size: 1rem; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.15rem; }
+  nav.site-nav a { margin-right: 0.8em; }
+}
