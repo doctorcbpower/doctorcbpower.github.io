@@ -3,43 +3,62 @@ layout: default
 title: Research
 description: "Research interests of Chris Power: dark matter, galaxy formation and dynamics, cosmological simulations, computational astrophysics and scientific inference."
 ---
+---
+
+layout: default
+title: Research
+description: "Research interests of Chris Power in cosmology and computational astrophysics."
+---------------------------------------------------------------------------------------------
+
 <h1>Research</h1>
 
-  <p>My research follows one thread from several directions: how different dark matter physics shapes halo and galaxy structure, how baryonic physics can produce changes that look similar, and how much of that difference survives into something we can actually observe and infer. The sections below are related rather than separate &mdash; most of what I do touches more than one of them.</p>
+<p>My research is in cosmology and computational astrophysics. I tend to be driven by physical questions rather than by a particular technique or class of object, and I use numerical simulations as a way of turning those questions into experiments. They allow particular pieces of physics to be varied and followed through from initial conditions to the structures and observables that result.</p>
 
-  <figure class="figure diagram">
-    <img src="images/xdm-scales.jpg" alt="Diagram showing dark matter signatures probed at different cosmic scales and epochs: early galaxy formation and the epoch of reionisation at early times, and satellite galaxies, stellar streams and the cosmic web at late times.">
-    <figcaption>The scales and epochs across which a dark matter model's effects can be probed, from early galaxy formation to the present-day cosmic web.</figcaption>
-  </figure>
+<p>Over the course of my career this has led me to work on a fairly broad range of problems, including the structure of dark matter haloes, galaxy formation and dynamics, galaxy clusters and large-scale structure, H&nbsp;I surveys, stellar populations, globular clusters, black holes, and high-mass X-ray binaries. These are not all parts of a single research programme. What connects them is an interest in how physical processes operating on different scales interact, and in what we can learn about those processes from the structures they produce.</p>
 
-  <h2>Dark matter</h2>
-  <p>I am interested in the nature of dark matter, and in what observations of galaxies and large-scale structure can actually tell us about it. It helps to separate the alternatives to cold dark matter into three broad classes: gravity-only models, such as cold or warm dark matter, where the physics is set by the initial power spectrum; models with additional interactions, such as self-interacting dark matter, where short-range interactions redistribute energy within haloes; and scalar-field models, such as fuzzy or axion-like dark matter, where a very light particle mass produces wave-like behaviour on astrophysical scales.</p>
+<h2>Dark matter and structure formation</h2>
 
-  <p>Different dark matter physics produces different halo and galaxy structure. The difficulty is that baryonic physics &mdash; feedback from stars and black holes, in particular &mdash; can produce changes that look much the same. Running matched simulations, in which only the dark matter physics changes and the galaxy-formation model is held fixed, gives a way of isolating the dark matter contribution: differences in outcome can then be traced to the dark matter model within that common framework, rather than being introduced by changing the feedback prescription. That does not remove every source of modelling uncertainty, but it turns an otherwise confounded comparison into a controlled one. The question that remains is how much of that difference survives as an observational constraint, once realistic observational effects are taken into account. I refer to this general problem &mdash; testing dark matter across its different classes on a like-for-like basis &mdash; as extended dark matter, or xDM.</p>
+<p>A particular focus of my current work is the nature of dark matter and what observations of galaxies and large-scale structure can tell us about it. Different dark matter models can change the abundance, structure and evolution of haloes, but their effects can be difficult to distinguish from those produced by galaxy formation. I am interested in using controlled simulations to isolate the effects of different dark matter models, and then asking which of those differences survive into observable properties of galaxies.</p>
 
-  <figure class="figure diagram">
-    <img src="images/xdm-toolbox.jpg" alt="Diagram showing the same simulation framework used to model gravity-only, interacting, and scalar-field dark matter, with galaxy formation held fixed, then compared to observations.">
-    <figcaption>Testing gravity-only, interacting and scalar-field dark matter models within the same simulation framework, with galaxy formation held fixed, then comparing the results to observations.</figcaption>
-  </figure>
+<p>This builds on a long-standing interest in the structure and dynamics of dark matter haloes. Early work included the numerical convergence of halo density profiles, their asymptotic structure and the reliability of subhalo detection. Later work explored halo assembly, satellite populations, tidal structure, warm dark matter and other departures from the standard cold dark matter picture. More recent work extends this to interacting and wave-like dark matter models and to the problem of connecting dark matter physics to observations of galaxies.</p>
 
-  <h2>Galaxy formation and dynamics</h2>
-  <p>Dark matter and baryonic physics act together to determine the structure and dynamics of galaxies. I work on questions of galaxy and halo structure, disc stability, baryonic contraction, and how simulated galaxies compare with observed ones.</p>
+<figure class="figure diagram">
+<img src="images/xdm-scales.jpg" alt="Diagram showing dark matter signatures probed at different cosmic scales and epochs.">
+<figcaption>Different scales and epochs provide different ways of looking for the effects of dark matter physics.</figcaption>
+</figure>
 
-  <figure class="figure diagram">
-    <img src="images/xdm-late-universe.jpg" alt="Diagram showing tests of dark matter in the local Universe, using satellite galaxies and stellar haloes around galaxies like the Milky Way, compared against different classes of dark matter model.">
-    <figcaption>Testing dark matter in the local Universe, using the structure of satellite galaxies and stellar haloes around galaxies like the Milky Way.</figcaption>
-  </figure>
+<h2>Galaxy formation and dynamics</h2>
 
-  <h2>Cosmological simulations</h2>
-  <p>Much of this work is done with large cosmological simulations, including zoom simulations of individual haloes. I am interested both in using simulations to answer scientific questions and in the numerical and computational methods that make those calculations tractable in the first place. An early example was working out the numerical convergence criteria needed to judge whether a simulated dark matter halo's inner structure can be trusted (Power et al. 2003); those criteria are still widely used to set the resolution of cosmological simulations.</p>
+<p>Galaxies form through the interaction of dark matter, gas, stars and feedback, and their observable properties carry information about all of these processes. I have worked on galaxy and halo structure, disc dynamics, baryonic contraction, gas accretion and removal, stellar and AGN feedback, satellite evolution, quenching, and the extended stellar components of galaxies.</p>
 
-  <figure class="figure diagram">
-    <img src="images/xdm-early-universe.jpg" alt="Diagram showing tests of dark matter in the early Universe, using the epoch of reionisation and high-redshift galaxies observed by JWST, compared against different classes of dark matter model.">
-    <figcaption>Testing dark matter in the early Universe, using the epoch of reionisation and high-redshift galaxies now being measured by JWST, and in future by the SKA.</figcaption>
-  </figure>
+<p>This work has often involved asking how a property of a galaxy relates to its dark matter halo, and how that relationship is altered by the processes involved in galaxy formation. It is also where the difficulty of interpreting galaxies as probes of fundamental physics becomes particularly clear: the same observable can contain information about several different physical processes.</p>
 
-  <h2>Computational astrophysics and scientific infrastructure</h2>
-  <p>I like building things other researchers can use: simulation infrastructure, scientific software, reproducible computational workflows, and tools that make complicated calculations easier to inspect and extend. Software written with my students and postdocs over the years includes halo-finding and merger-tree codes, tools for predicting the abundance of dark matter haloes, and pipelines for generating synthetic observations from simulated galaxies. This extends to high-performance and GPU computing. None of it is peripheral to the science: the numerical methods and the infrastructure they run on shape what a simulation can actually tell you, so working on them is part of doing the research rather than a service task alongside it.</p>
+<h2>Galaxy populations and H&nbsp;I</h2>
 
-  <h2>Scientific inference</h2>
-  <p>A question that runs through most of the above is where information is lost along the chain from fundamental physics, through simulation and galaxy formation, to what we actually observe and infer. Working out which assumptions matter, and what a given observation can genuinely constrain, is as much a part of the work as any individual result.</p>
+<p>I have worked extensively on the use of galaxy populations and neutral hydrogen as probes of galaxy formation and cosmology. This includes the H&nbsp;I mass function and velocity function, the relationship between H&nbsp;I content and halo mass, the spatial distribution and asymmetry of H&nbsp;I, and the effects of environment on gas-rich galaxies.</p>
+
+<p>These questions connect simulations to large observational surveys, including GAMA, SAMI, ASKAP and the developing SKA programme. They provide a useful complement to studies of individual galaxies: rather than asking only how one galaxy formed, we can ask whether a model produces the observed population as a whole.</p>
+
+<h2>Clusters and large-scale structure</h2>
+
+<p>On larger scales, I have used cosmological simulations to study galaxy clusters, their dynamical state and the influence of baryonic physics on their observable properties. This includes work on cluster density profiles and mergers, gas in cluster outskirts, the comparison of different hydrodynamical galaxy-formation models, the cosmic web and cosmic voids.</p>
+
+<p>Projects such as nIFTy and The Three Hundred have also provided a way to compare different simulation methods and physical models directly. Such comparisons are useful for understanding which features of a prediction arise from the underlying physics and which depend on the numerical or galaxy-formation model used to produce it.</p>
+
+<h2>Stars, stellar populations and the early Universe</h2>
+
+<p>Some of my earlier work addressed smaller physical systems and their consequences on cosmological scales. I have worked on globular and star-cluster evolution, stellar population modelling, and high-mass X-ray binaries. In particular, I studied how populations of X-ray binaries associated with early galaxies could heat and ionise the intergalactic medium during the epoch of reionisation.</p>
+
+<p>This is an example of the connections between scales that interest me: processes involving individual stars and binary systems can have consequences for the evolution of galaxies and, ultimately, for the state of the intergalactic medium.</p>
+
+<h2>Simulation and computational astrophysics</h2>
+
+<p>Simulation is the tool that runs through much of this work. I am interested not only in using simulations to answer scientific questions, but also in the numerical problems involved in making them reliable and useful. This has included work on numerical convergence, halo and subhalo identification, merger trees, mass functions, mock catalogues, synthetic observations and the comparison of different simulation methods.</p>
+
+<p>I also develop scientific software and computational infrastructure, from tools for analysing and visualising simulations to codes for generating and modelling astrophysical populations. I particularly enjoy building things that are useful beyond the immediate problem for which they were developed.</p>
+
+<h2>From physics to observation</h2>
+
+<p>A question that connects much of this work is how information about underlying physics survives the journey from theory, through structure formation and the complex processes of galaxy formation, to something we can actually observe. A simulation gives us an opportunity to follow that journey and to experiment with its individual components, but it also introduces assumptions of its own.</p>
+
+<p>I am therefore interested not only in what a model predicts, but in what can genuinely be inferred from that prediction or from an observation. Which differences are robust? Which depend on modelling choices? Where is information lost, and where are apparently distinct physical explanations observationally degenerate? For me, these questions are often as interesting as the particular system being simulated.</p>
