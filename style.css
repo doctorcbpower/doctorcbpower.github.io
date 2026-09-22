@@ -409,6 +409,29 @@ figure.figure.wide img {
     width: 100%;
 }
 
+figure.figure-margin-right {
+    position: relative;
+    width: 18rem;
+    margin: 1rem 0 2rem 2rem;
+    float: right;
+    transform: translateX(8rem);
+}
+
+figure.figure-margin-right img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+figure.figure-margin-right figcaption {
+    margin-top: .65rem;
+    padding-left: .7rem;
+    border-left: 2px solid var(--accent);
+    color: var(--muted);
+    font-size: .72rem;
+    line-height: 1.5;
+}
+
 
 /* ============================================================
    FOOTER
@@ -564,4 +587,11 @@ a:focus-visible {
         transition: none !important;
         transform: none !important;
     }
+
+   figure.figure-margin-right {
+    float: none;
+    width: 100%;
+    margin: 2.5rem 0;
+    transform: none;
+   }
 }
