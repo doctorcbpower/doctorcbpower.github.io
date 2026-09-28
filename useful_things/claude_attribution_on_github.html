@@ -1,0 +1,288 @@
+---
+layout: default
+description: "Chris Power is a theoretical and computational astrophysicist at ICRAR, The University of Western Australia, working on dark matter, galaxy formation and cosmological simulations."
+---
+        <h1>Fixing a Stale Claude Contributor on a GitHub Repository Homepage</h1>
+        
+        <p>
+        If you have used Claude Code on a GitHub repository and later removed its
+        <code>Co-Authored-By</code> entries from the Git history, you may find that
+        <strong>Claude still appears as a contributor on the repository homepage</strong>.
+        </p>
+        
+        <p>
+        This can be particularly confusing because GitHub's other contributor views may
+        already be correct:
+        </p>
+        
+        <ul>
+            <li>the current Git history contains no Claude attribution;</li>
+            <li><strong>Insights → Contributors</strong> lists only the real contributors;</li>
+            <li>the <strong>REST Contributors API</strong> lists only the real contributors;</li>
+            <li>but the repository homepage still displays Claude in its Contributors widget.</li>
+        </ul>
+        
+        <p>
+        This appears to be a GitHub-side stale-cache or indexing problem. There are
+        multiple recent reports of this exact discrepancy.
+        </p>
+        
+        <h2>The Workaround</h2>
+        
+        <p>
+        The simplest non-destructive workaround I found is to temporarily change the
+        repository's default branch.
+        </p>
+        
+        <h3>1. Make Sure the Git History Is Actually Clean</h3>
+        
+        <p>
+        First verify that the unwanted attribution has really been removed.
+        </p>
+        
+        <pre><code>git log master --format='%B' | grep -i 'co-authored-by.*claude'
+        </code></pre>
+        
+        <p>
+        If this produces no output, that particular attribution is no longer present in
+        the <code>master</code> history.
+        </p>
+        
+        <p>
+        You should also check GitHub:
+        </p>
+        
+        <p><strong>Repository → Insights → Contributors</strong></p>
+        
+        <p>
+        and, if desired, the Contributors REST API.
+        </p>
+        
+        <p>
+        It is important to establish that this is actually a stale homepage display
+        rather than an attribution that still exists somewhere in the repository.
+        </p>
+        
+        <h3>2. Create a Temporary Branch from the Clean Default Branch</h3>
+        
+        <p>
+        In my case the default branch was called <code>master</code> rather than
+        <code>main</code>:
+        </p>
+        
+        <pre><code>git checkout master
+            git checkout -b temp-cache-bust
+            git push origin temp-cache-bust
+        </code></pre>
+        
+        <p>
+        If your repository uses <code>main</code>, substitute <code>main</code>
+        accordingly.
+        </p>
+        
+        <p>
+        You should now have a temporary branch containing exactly the same code and
+        history as the clean default branch.
+        </p>
+        
+        <h3>3. Temporarily Make the Branch the GitHub Default</h3>
+        
+        <p>On GitHub:</p>
+        
+        <p><strong>Repository → Settings → General → Default branch</strong></p>
+        
+        <p>Change the default branch from:</p>
+        
+        <pre><code>master
+        </code></pre>
+        
+        <p>to:</p>
+        
+        <pre><code>temp-cache-bust
+        </code></pre>
+        
+        <p>
+        GitHub documents this as a normal repository operation; a repository with more
+        than one branch can have any of them configured as the default branch.
+        </p>
+        
+        <h3>4. Check the Repository Homepage</h3>
+        
+        <p>
+        Visit the repository's main page.
+        </p>
+        
+        <p>In my case, this immediately changed the Contributors widget from:</p>
+        
+        <pre><code>doctorcbpower
+            claude
+        </code></pre>
+        
+        <p>to:</p>
+        
+        <pre><code>doctorcbpower
+        </code></pre>
+        
+        <p>
+        That was the key diagnostic result:
+        <strong>the repository itself was clean; the stale contributor was associated
+            with the homepage's cached contributor information.</strong>
+        </p>
+        
+        <h3>5. Change the Default Branch Back</h3>
+        
+        <p>
+        Once the homepage has refreshed, return to:
+        </p>
+        
+        <p><strong>Settings → General → Default branch</strong></p>
+        
+        <p>and change:</p>
+        
+        <pre><code>temp-cache-bust
+        </code></pre>
+        
+        <p>back to:</p>
+        
+        <pre><code>master
+        </code></pre>
+        
+        <p>
+        Check the repository homepage again.
+        </p>
+        
+        <p>
+        If the stale contributor has disappeared, the cache refresh has worked.
+        </p>
+        
+        <h3>6. Delete the Temporary Branch</h3>
+        
+        <p>
+        Once you are satisfied that the homepage is correct:
+        </p>
+        
+        <pre><code>git push origin --delete temp-cache-bust
+            git checkout master
+            git branch -D temp-cache-bust
+        </code></pre>
+        
+        <p>
+        The final <code>git checkout master</code> is important if you are currently
+        working on the temporary branch. Otherwise Git will correctly refuse to delete
+        a branch that is checked out in your current worktree.
+        </p>
+        
+        <h2>Why This Is Useful</h2>
+        
+        <p>
+        This avoids unnecessarily rewriting the repository again or creating a new
+        repository.
+        </p>
+        
+        <p>
+        The important distinction is between <strong>Git history</strong> and
+        <strong>GitHub's derived repository metadata</strong>.
+        </p>
+        
+        <p>If:</p>
+        
+        <pre><code>Git history             → clean
+            Insights → Contributors → clean
+            REST Contributors API   → clean
+            Repository homepage     → stale
+        </code></pre>
+        
+        <p>
+        then rewriting the history again is unlikely to solve the actual problem.
+        </p>
+        
+        <p>
+        Recent GitHub Community reports show the same pattern: the homepage contributor
+        widget can disagree with both the Contributors graph and the REST API after
+        history has been rewritten.
+        </p>
+        
+        <p>
+        A September 2026 Community report specifically describes the default-branch
+        toggle as a workaround for this stale sidebar, and another user reported that it
+        worked. This is <strong>community-reported behaviour</strong>, not an official
+        GitHub cache-invalidation procedure, so it should be treated as a workaround
+        rather than guaranteed GitHub functionality.
+        </p>
+        
+        <h2>If It Doesn't Work</h2>
+        
+        <p>
+        Before taking more drastic action:
+        </p>
+        
+        <ol>
+            <li>Verify the Git history again.</li>
+            <li>Check <strong>Insights → Contributors</strong>.</li>
+            <li>Check the Contributors REST API.</li>
+            <li>Check that no other active branch or tag contains the unwanted attribution.</li>
+            <li>Give GitHub's contributor data some time to refresh.</li>
+        </ol>
+        
+        <p>
+        GitHub's documentation says contributor displays and statistics can take around
+        24 hours to refresh after history changes, and directs repository owners to
+        GitHub Support if they remain incorrect afterwards.
+        </p>
+        
+        <p>
+        I would <strong>not immediately delete and recreate the repository</strong>
+        merely because the homepage widget is stale. Repository recreation has
+        consequences for:
+        </p>
+        
+        <ul>
+            <li>repository URLs;</li>
+            <li>issues;</li>
+            <li>releases;</li>
+            <li>integrations;</li>
+            <li>stars;</li>
+            <li>forks;</li>
+            <li>DOI/archive links;</li>
+            <li>and other repository-level metadata.</li>
+        </ul>
+        
+        <h2>In Short</h2>
+        
+        <p>
+        If your repository is clean but GitHub's homepage still shows a former Claude
+        contributor:
+        </p>
+        
+        <pre><code>git checkout master
+            git checkout -b temp-cache-bust
+            git push origin temp-cache-bust
+        </code></pre>
+        
+        <p>Then:</p>
+        
+        <pre><code>GitHub
+            → Settings
+            → General
+            → Default branch
+            → temp-cache-bust
+            → Update
+            
+            wait/check homepage
+            
+            → master
+            → Update
+        </code></pre>
+        
+        <p>Finally:</p>
+        
+        <pre><code>git push origin --delete temp-cache-bust
+            git checkout master
+            git branch -D temp-cache-bust
+        </code></pre>
+        
+        <p>
+        This is a relatively low-risk cache-busting workaround worth trying
+        <strong>before considering repository recreation</strong>.
+        </p>
+        
