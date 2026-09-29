@@ -1,0 +1,221 @@
+---
+layout: default
+description: "Remove unwanted AI attribution from existing git commit messages while preserving rest of history"
+---
+<h1>Cleaning AI Attribution from Git History</h1>
+
+<p>
+  This procedure removes unwanted AI attribution, such as
+  <code>Co-Authored-By: Claude ...</code>, from existing Git commit
+  messages while preserving the rest of the history.
+</p>
+
+<div class="warning">
+  <strong>Important:</strong> rewriting Git history changes commit hashes.
+  Make a backup before proceeding, and coordinate with anyone else who may
+  have cloned the repository.
+</div>
+
+<h2>1. Check the repository before changing anything</h2>
+
+<pre><code>git status
+git branch --show-current
+git remote -v</code></pre>
+
+<p>
+  Identify the branch that is actually being used. Do not assume that it is
+  <code>main</code>; it may be <code>master</code> or another branch.
+</p>
+
+<h2>2. Make a backup</h2>
+
+<p>
+  Create a separate clone or branch before rewriting history. A separate
+  mirror clone is the safest option:
+</p>
+
+<pre><code>git clone --mirror &lt;REPOSITORY-URL&gt; repository-backup.git</code></pre>
+
+<p>
+  Alternatively, create a local safety branch:
+</p>
+
+<pre><code>git branch backup-before-history-rewrite</code></pre>
+
+<h2>3. Inspect the existing history</h2>
+
+<p>
+  Search commit messages for the attribution you want to remove:
+</p>
+
+<pre><code>git log --all --format='%H %s%n%b' |
+  grep -i -E 'claude|co-authored-by'</code></pre>
+
+<p>
+  Adjust the search expression if the unwanted attribution uses a different
+  name or form.
+</p>
+
+<h2>4. Rewrite the commit messages</h2>
+
+<p>
+  <code>git-filter-repo</code> can rewrite commit messages throughout the
+  repository. For example, to remove a Claude
+  <code>Co-Authored-By</code> trailer:
+</p>
+
+<pre><code>git filter-repo --force --message-callback \
+'import re; message = re.sub(rb"(?im)^[ \t]*co-authored-by:[ \t]*claude[^\n]*\n?", b"", message); return message'</code></pre>
+
+<p>
+  The regular expression is deliberately case-insensitive and removes the
+  complete attribution line rather than altering other parts of the commit
+  message.
+</p>
+
+<p>
+  For another attribution, replace <code>claude</code> with the appropriate
+  identifying text and adjust the expression if necessary.
+</p>
+
+<h2>5. Verify the rewritten history</h2>
+
+<p>
+  Search again:
+</p>
+
+<pre><code>git log --all --format='%H %s%n%b' |
+  grep -i -E 'co-authored-by.*claude'</code></pre>
+
+<p>
+  No output means that the matching attribution is no longer present in the
+  reachable history.
+</p>
+
+<p>
+  Inspect recent commits manually as well:
+</p>
+
+<pre><code>git log -5 --format='%h %an &lt;%ae&gt;%n%B%n---'</code></pre>
+
+<h2>6. Check branches, tags and repository state</h2>
+
+<pre><code>git branch -a
+git tag
+git status</code></pre>
+
+<p>
+  History rewriting can affect more than the branch currently checked out.
+  Confirm that the branches and tags you intend to retain are present and
+  that the working tree is in the expected state.
+</p>
+
+<h2>7. Reconnect to the remote if necessary</h2>
+
+<p>
+  Depending on how <code>git-filter-repo</code> was run and the repository
+  configuration, the remote may have been removed. Check:
+</p>
+
+<pre><code>git remote -v</code></pre>
+
+<p>
+  If necessary, restore it:
+</p>
+
+<pre><code>git remote add origin &lt;REPOSITORY-URL&gt;</code></pre>
+
+<p>
+  Then fetch the remote state:
+</p>
+
+<pre><code>git fetch origin</code></pre>
+
+<h2>8. Compare the rewritten branch with the remote</h2>
+
+<p>
+  Replace <code>BRANCH</code> with the actual branch name:
+</p>
+
+<pre><code>git log --oneline --left-right --graph origin/BRANCH...BRANCH</code></pre>
+
+<p>
+  Because the history has been rewritten, the local commits will normally
+  have different hashes from the old remote commits.
+</p>
+
+<h2>9. Force-push the rewritten history</h2>
+
+<p class="warning">
+  <strong>Take care here.</strong> This replaces the remote history with the
+  rewritten history. Confirm the branch name before running the command.
+</p>
+
+<pre><code>git push --force origin BRANCH</code></pre>
+
+<p>
+  Do not substitute <code>main</code> merely because it is conventional.
+  Use the branch reported by <code>git branch --show-current</code> or the
+  repository's actual default branch.
+</p>
+
+<h2>10. Prevent the attribution from returning</h2>
+
+<p>
+  If the attribution is being added automatically by a local Git hook or
+  another tool, remove or filter it before committing. Otherwise a clean
+  history can acquire the same attribution again after the rewrite.
+</p>
+
+<p>
+  A commit-message hook can remove unwanted trailers before the commit is
+  created. Test the hook by making a normal commit and inspecting:
+</p>
+
+<pre><code>git log -1 --format='%B'</code></pre>
+
+<h2>11. Final verification</h2>
+
+<p>
+  Run the search one final time:
+</p>
+
+<pre><code>git log --all --format='%H %s%n%b' |
+  grep -i -E 'co-authored-by.*claude'</code></pre>
+
+<p>
+  Also verify the repository state:
+</p>
+
+<pre><code>git status
+git branch -a
+git log --oneline -5</code></pre>
+
+<p>
+  If the attribution search returns nothing and the expected branches and
+  commits are present, the reachable history has been cleaned.
+</p>
+
+<h2>Summary</h2>
+
+<ol>
+  <li>Check the current repository and branch.</li>
+  <li>Make an independent backup.</li>
+  <li>Search the history for the unwanted attribution.</li>
+  <li>Rewrite commit messages with <code>git-filter-repo</code>.</li>
+  <li>Verify that the attribution has disappeared.</li>
+  <li>Check branches and tags.</li>
+  <li>Restore the remote if necessary.</li>
+  <li>Compare the rewritten branch with the remote.</li>
+  <li>Force-push the correct branch.</li>
+  <li>Install or retain a commit hook so the attribution does not return.</li>
+</ol>
+
+<div class="note">
+  <strong>Principle:</strong> clean the existing history once, then prevent
+  the unwanted metadata from being introduced into future commits.
+</div>
+
+</body>
+</html>
+
