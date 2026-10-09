@@ -2,219 +2,274 @@
 layout: default
 description: "Remove unwanted AI attribution from existing git commit messages while preserving rest of history"
 ---
-<h1>Cleaning AI Attribution from Git History</h1>
+# Cleaning AI Attribution from Git History
 
-<p>
-  This procedure removes unwanted AI attribution, such as
-  <code>Co-Authored-By: Claude ...</code>, from existing Git commit
-  messages while preserving the rest of the history.
-</p>
+This procedure removes unwanted AI attribution, such as `Co-Authored-By: Claude ...`, from Git commit messages while preserving the substantive commit messages and code changes.
 
-<div class="warning">
-  <strong>Important:</strong> rewriting Git history changes commit hashes.
-  Make a backup before proceeding, and coordinate with anyone else who may
-  have cloned the repository.
-</div>
+**Important:** rewriting Git history changes commit hashes. It can affect branches and tags, disrupt other clones, and require a coordinated update to GitHub. Work on a separate clone, inspect the result before publishing it, and do not force-push until you have verified exactly what will change.
 
-<h2>1. Check the repository before changing anything</h2>
+These instructions concern attribution in commit messages. They do not remove AI-generated content from source files, change the recorded author or committer identities, or establish who actually contributed to the work.
 
-<pre><code>git status
+## 1. Inspect the repository
+
+From the repository directory, run:
+
+```bash
+git status
 git branch --show-current
-git remote -v</code></pre>
-
-<p>
-  Identify the branch that is actually being used. Do not assume that it is
-  <code>main</code>; it may be <code>master</code> or another branch.
-</p>
-
-<h2>2. Make a backup</h2>
-
-<p>
-  Create a separate clone or branch before rewriting history. A separate
-  mirror clone is the safest option:
-</p>
-
-<pre><code>git clone --mirror &lt;REPOSITORY-URL&gt; repository-backup.git</code></pre>
-
-<p>
-  Alternatively, create a local safety branch:
-</p>
-
-<pre><code>git branch backup-before-history-rewrite</code></pre>
-
-<h2>3. Inspect the existing history</h2>
-
-<p>
-  Search commit messages for the attribution you want to remove:
-</p>
-
-<pre><code>git log --all --format='%H %s%n%b' |
-  grep -i -E 'claude|co-authored-by'</code></pre>
-
-<p>
-  Adjust the search expression if the unwanted attribution uses a different
-  name or form.
-</p>
-
-<h2>4. Rewrite the commit messages</h2>
-
-<p>
-  <code>git-filter-repo</code> can rewrite commit messages throughout the
-  repository. For example, to remove a Claude
-  <code>Co-Authored-By</code> trailer:
-</p>
-
-<pre><code>git filter-repo --force --message-callback \
-'import re; message = re.sub(rb"(?im)^[ \t]*co-authored-by:[ \t]*claude[^\n]*\n?", b"", message); return message'</code></pre>
-
-<p>
-  The regular expression is deliberately case-insensitive and removes the
-  complete attribution line rather than altering other parts of the commit
-  message.
-</p>
-
-<p>
-  For another attribution, replace <code>claude</code> with the appropriate
-  identifying text and adjust the expression if necessary.
-</p>
-
-<h2>5. Verify the rewritten history</h2>
-
-<p>
-  Search again:
-</p>
-
-<pre><code>git log --all --format='%H %s%n%b' |
-  grep -i -E 'co-authored-by.*claude'</code></pre>
-
-<p>
-  No output means that the matching attribution is no longer present in the
-  reachable history.
-</p>
-
-<p>
-  Inspect recent commits manually as well:
-</p>
-
-<pre><code>git log -5 --format='%h %an &lt;%ae&gt;%n%B%n---'</code></pre>
-
-<h2>6. Check branches, tags and repository state</h2>
-
-<pre><code>git branch -a
-git tag
-git status</code></pre>
-
-<p>
-  History rewriting can affect more than the branch currently checked out.
-  Confirm that the branches and tags you intend to retain are present and
-  that the working tree is in the expected state.
-</p>
-
-<h2>7. Reconnect to the remote if necessary</h2>
-
-<p>
-  Depending on how <code>git-filter-repo</code> was run and the repository
-  configuration, the remote may have been removed. Check:
-</p>
-
-<pre><code>git remote -v</code></pre>
-
-<p>
-  If necessary, restore it:
-</p>
-
-<pre><code>git remote add origin &lt;REPOSITORY-URL&gt;</code></pre>
-
-<p>
-  Then fetch the remote state:
-</p>
-
-<pre><code>git fetch origin</code></pre>
-
-<h2>8. Compare the rewritten branch with the remote</h2>
-
-<p>
-  Replace <code>BRANCH</code> with the actual branch name:
-</p>
-
-<pre><code>git log --oneline --left-right --graph origin/BRANCH...BRANCH</code></pre>
-
-<p>
-  Because the history has been rewritten, the local commits will normally
-  have different hashes from the old remote commits.
-</p>
-
-<h2>9. Force-push the rewritten history</h2>
-
-<p class="warning">
-  <strong>Take care here.</strong> This replaces the remote history with the
-  rewritten history. Confirm the branch name before running the command.
-</p>
-
-<pre><code>git push --force origin BRANCH</code></pre>
-
-<p>
-  Do not substitute <code>main</code> merely because it is conventional.
-  Use the branch reported by <code>git branch --show-current</code> or the
-  repository's actual default branch.
-</p>
-
-<h2>10. Prevent the attribution from returning</h2>
-
-<p>
-  If the attribution is being added automatically by a local Git hook or
-  another tool, remove or filter it before committing. Otherwise a clean
-  history can acquire the same attribution again after the rewrite.
-</p>
-
-<p>
-  A commit-message hook can remove unwanted trailers before the commit is
-  created. Test the hook by making a normal commit and inspecting:
-</p>
-
-<pre><code>git log -1 --format='%B'</code></pre>
-
-<h2>11. Final verification</h2>
-
-<p>
-  Run the search one final time:
-</p>
-
-<pre><code>git log --all --format='%H %s%n%b' |
-  grep -i -E 'co-authored-by.*claude'</code></pre>
-
-<p>
-  Also verify the repository state:
-</p>
-
-<pre><code>git status
+git remote -v
 git branch -a
-git log --oneline -5</code></pre>
+git tag
+```
 
-<p>
-  If the attribution search returns nothing and the expected branches and
-  commits are present, the reachable history has been cleaned.
-</p>
+Check that the working tree is clean and identify the branch you intend to update. If there are uncommitted changes, commit or safely preserve them before proceeding.
 
-<h2>Summary</h2>
+Do not assume that the relevant branch is `main` or `master`.
 
-<ol>
-  <li>Check the current repository and branch.</li>
-  <li>Make an independent backup.</li>
-  <li>Search the history for the unwanted attribution.</li>
-  <li>Rewrite commit messages with <code>git-filter-repo</code>.</li>
-  <li>Verify that the attribution has disappeared.</li>
-  <li>Check branches and tags.</li>
-  <li>Restore the remote if necessary.</li>
-  <li>Compare the rewritten branch with the remote.</li>
-  <li>Force-push the correct branch.</li>
-  <li>Install or retain a commit hook so the attribution does not return.</li>
-</ol>
+Inspect the commit messages for unwanted attribution:
 
-<div class="note">
-  <strong>Principle:</strong> clean the existing history once, then prevent
-  the unwanted metadata from being introduced into future commits.
-</div>
+```bash
+git log --all --format='%H %s%n%b' |
+  grep -i -E 'claude|co-authored-by'
+```
+
+Review the matches. Decide exactly which lines should be removed. Do not remove legitimate authorship information or unrelated co-author trailers.
+
+## 2. Make an independent backup
+
+The safest approach is to work on a fresh clone and retain a separate mirror backup of the original repository.
+
+From the parent directory of the repository, run:
+
+```bash
+git clone --mirror <REPOSITORY-URL> repository-backup.git
+git clone <REPOSITORY-URL> repository-cleanup
+```
+
+Replace `<REPOSITORY-URL>` with the actual repository URL.
+
+Keep `repository-backup.git` untouched. It preserves the original Git references and history independently of the working copy.
+
+If the repository has important local-only branches or commits that have not been pushed, preserve those separately before proceeding. A fresh clone of GitHub will not contain them.
+
+Change into the cleanup clone:
+
+```bash
+cd repository-cleanup
+```
+
+Confirm the branch and repository state again:
+
+```bash
+git status
+git branch --show-current
+git remote -v
+```
+
+## 3. Install and check git-filter-repo
+
+Ensure that `git-filter-repo` is installed and available:
+
+```bash
+git filter-repo --version
+```
+
+If the command is unavailable, install `git-filter-repo` using the instructions for your operating system before continuing.
+
+The cleanup command below is intended to remove lines beginning with `Co-Authored-By:` whose value starts with `Claude`, ignoring case and leading whitespace. It preserves the rest of each commit message.
+
+## 4. Preview the proposed change
+
+Before rewriting history, inspect the exact commit messages that match the intended pattern.
+
+For example:
+
+```bash
+git log --all --format='commit %H%n%B%n---' |
+  grep -i -B 1 -A 1 'co-authored-by:.*claude'
+```
+
+This is an initial search, not a complete audit of every possible attribution format. Examine the full messages of any matching commits and decide whether the proposed rule is appropriate.
+
+If the unwanted text appears in commit subjects, author identities, tag messages, or a different trailer format, adapt the procedure rather than assuming the rule below covers it.
+
+## 5. Rewrite the commit messages
+
+**Proceed only after confirming the backup exists and the matching lines are the ones you intend to remove.**
+
+Run the following command from the cleanup clone:
+
+```bash
+git filter-repo --message-callback '
+import re
+return re.sub(
+    rb"(?im)^[ \t]*co-authored-by:[ \t]*claude[^\r\n]*(?:\r?\n|$)",
+    b"",
+    message
+)
+'
+```
+
+This removes matching Claude co-author trailer lines from commit and tag messages processed by `git-filter-repo`. It does not remove arbitrary mentions of Claude elsewhere in a message.
+
+The command rewrites history, so commit hashes will change. The tool may also remove the `origin` remote. This is expected behaviour in some normal `git-filter-repo` workflows.
+
+Do not add `--force` automatically. If `git-filter-repo` refuses to run because the repository does not meet its fresh-clone safety check, stop and resolve that issue. Do not bypass the check without first understanding why it was triggered.
+
+## 6. Verify the rewritten history
+
+Search the rewritten history for remaining Claude co-author trailers:
+
+```bash
+git log --all --format='%H %s%n%b' |
+  grep -i -E 'co-authored-by.*claude'
+```
+
+No output means that this search found no remaining matches in the reachable history. It does not prove that every possible form of AI attribution has been removed.
+
+Inspect recent commits:
+
+```bash
+git log -5 --format='%h %an <%ae>%n%B%n---'
+```
+
+Check that:
+
+- The intended attribution lines have disappeared.
+- The rest of each affected commit message remains intact.
+- Author and committer identities have not been changed.
+- The source files and substantive changes remain as expected.
+- Commit subjects, tags and other metadata are still appropriate.
+
+Also check the current state:
+
+```bash
+git status
+git branch -a
+git tag
+```
+
+Compare the rewritten history with the original backup if anything looks unexpected. Do not publish the rewritten history until the results are satisfactory.
+
+## 7. Decide which branches and tags to update
+
+Do not assume that cleaning the currently checked-out branch cleans every branch or tag you intend to retain.
+
+Identify the refs that were rewritten and the refs that must remain available. Check the repository's default branch and any release branches or tags that matter.
+
+A history rewrite can change commit IDs throughout descendant histories, even when the code changes themselves are identical. Signed commits and annotated tags may also need special attention because rewriting can invalidate signatures or change tag objects.
+
+If you only intended to clean one branch, confirm that the procedure has not inadvertently left you with a mixture of old and rewritten history that you might later publish.
+
+## 8. Prepare the GitHub update
+
+Do not push yet.
+
+First inspect the remotes:
+
+```bash
+git remote -v
+```
+
+If `origin` was removed by `git-filter-repo`, restore it only after confirming the correct repository URL:
+
+```bash
+git remote add origin <REPOSITORY-URL>
+```
+
+Then inspect the remote state:
+
+```bash
+git fetch origin
+git branch -avv
+```
+
+Fetching does not make the rewritten history safe to publish. It simply allows you to inspect the current remote references.
+
+Confirm which remote branches and tags need to be replaced. If other people use the repository, coordinate the rewrite with them first. They may need to re-clone or carefully reconcile their local branches.
+
+## 9. Publish only after explicit verification
+
+Rewriting a local repository and replacing history on GitHub are separate operations.
+
+Before publishing, confirm all of the following:
+
+1. The independent backup is intact.
+2. The intended branch and tags have been identified.
+3. The unwanted attribution is absent from the rewritten history.
+4. The code and substantive commit messages are unchanged.
+5. The remote repository is the correct one.
+6. Anyone relying on the existing history has been informed.
+
+If the rewrite is intended to replace a remote branch, use an explicit lease-based force-push rather than an unconditional force-push:
+
+```bash
+git push \
+  --force-with-lease=refs/heads/BRANCH:EXPECTED_OLD_COMMIT \
+  origin \
+  refs/heads/BRANCH:refs/heads/BRANCH
+```
+
+Replace `BRANCH` with the actual branch name and `EXPECTED_OLD_COMMIT` with the exact remote commit ID you verified before pushing. Do not copy placeholder values literally.
+
+This command refuses the update if the remote branch no longer points to the expected commit. It does not remove the need to review the proposed replacement carefully.
+
+If the rewrite affects multiple branches or tags, handle each intended ref explicitly and verify the result. Do not use a broad push command without understanding which refs it will publish.
+
+After pushing, fetch the remote state again and verify the updated branch and tags. Keep the backup until the rewritten repository has been checked and any collaborators have successfully reconciled their clones.
+
+## 10. Prevent unwanted attribution from returning
+
+First establish how the attribution is being added. Possible causes include an AI coding tool's commit configuration, a Git alias, a commit-message template, or a local hook.
+
+Inspect the relevant configuration and tooling before changing anything. Do not assume that a Git hook is responsible.
+
+If the attribution is being added automatically, change the setting that introduces it where possible. A local commit-message hook is an alternative, but it should be tested against ordinary commit messages and should remove only the specific unwanted trailer.
+
+For example, inspect the latest commit with:
+
+```bash
+git log -1 --format='%B'
+```
+
+A hook is not a substitute for checking the output, and local hooks are not necessarily shared with collaborators.
+
+## 11. Final verification
+
+Run the search again:
+
+```bash
+git log --all --format='%H %s%n%b' |
+  grep -i -E 'co-authored-by.*claude'
+```
+
+Also check:
+
+```bash
+git status
+git branch -a
+git tag
+git log --oneline -5
+git remote -v
+```
+
+Confirm that the intended branches and tags exist, the working tree is in the expected state, and GitHub reflects the intended rewritten history if you chose to publish it.
+
+Remember that a clean search only establishes that the searched attribution pattern is absent from the refs inspected. Other clones, old commits retained elsewhere, pull-request references, forks, cached objects and other attribution formats may still exist.
+
+## Summary
+
+1. Inspect the repository and identify the unwanted attribution.
+2. Create an independent backup and a separate cleanup clone.
+3. Preview the exact lines to remove.
+4. Rewrite the relevant commit messages.
+5. Verify that only the intended metadata changed.
+6. Check branches, tags, signatures and repository state.
+7. Treat publishing to GitHub as a separate, deliberate operation.
+8. Coordinate with collaborators and retain the backup.
+9. Identify and fix the mechanism that reintroduces unwanted attribution.
+
+**Principle:** preserve the scientific and technical record, remove only the metadata you have deliberately identified, and never rewrite shared history without verifying the consequences.
 
 </body>
 </html>
